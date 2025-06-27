@@ -8,7 +8,9 @@ This Node.js/Express server provides authentication and inspection management AP
    ```bash
    npm install
    ```
-2. Copy `.env.example` to `.env` and adjust values as needed:
+2. Copy `.env.example` to `.env` and adjust values as needed. Make sure
+   `CORS_ALLOWED_ORIGINS` includes the origin of the frontend (see
+   [`server/.env.example`](./.env.example)):
    ```bash
    cp .env.example .env
    ```
