@@ -11,6 +11,7 @@ require('./config/db');
 
 const authRouter = require('./routes/auth');
 const managerRouter = require('./routes/managers');
+const inspectionRoundRouter = require('./routes/inspectionRounds');
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/auth', authRouter);
 app.use('/api/managers', managerRouter);
+app.use('/api/rounds', inspectionRoundRouter);
 
 
 module.exports = app;
