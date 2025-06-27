@@ -7,7 +7,7 @@ exports.create = async (req, res) => {
 
     const manager = await Manager.findById(managerId);
     if (!manager) {
-      return res.status(404).json({ message: 'Manager not found' });
+      return res.status(404).json({ message: 'المدير غير موجود' });
     }
 
     roundData.managerName = manager.name;
@@ -22,7 +22,7 @@ exports.create = async (req, res) => {
     res.status(201).json(round);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'خطأ في الخادم' });
   }
 };
 
@@ -32,7 +32,7 @@ exports.list = async (req, res) => {
     res.json(rounds);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'خطأ في الخادم' });
   }
 };
 
@@ -40,11 +40,11 @@ exports.getById = async (req, res) => {
   try {
     const round = await InspectionRound.findById(req.params.id);
     if (!round) {
-      return res.status(404).json({ message: 'Inspection round not found' });
+      return res.status(404).json({ message: 'جولة التفتيش غير موجودة' });
     }
     res.json(round);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: 'خطأ في الخادم' });
   }
 };
