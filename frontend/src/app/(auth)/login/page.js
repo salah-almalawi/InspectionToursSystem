@@ -22,6 +22,21 @@ export default function LoginPage() {
         }
     };
 
+
+    const getErrorText = (err) => {
+        if (!err) return null;
+        if (err.data?.message) return err.data.message;
+        if (err.data?.errors) {
+            const validation = err.data.errors;
+            if (Array.isArray(validation)) {
+                return validation[0];
+            }
+            return Object.values(validation).flat().join(' ');
+        }
+        return 'Error';
+    };
+
+
     return (
         <form onSubmit={handleSubmit}>
             <h1>Login</h1>
@@ -41,7 +56,7 @@ export default function LoginPage() {
             <button type="submit" disabled={isLoading}>
                 Login
             </button>
-            {error && <p>{error.data?.message || 'Error'}</p>}
+            {error && <p>{getErrorText(error)}</p>}
         </form>
     );
 }
