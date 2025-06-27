@@ -30,7 +30,6 @@ exports.summary = async (req, res) => {
     const InspectionRound = require('../models/inspectionRound');
 
     const allRounds = await InspectionRound.find()
-      .populate('manager')
       .sort({ createdAt: 1 });
 
     res.json({ manager, allRounds });
@@ -80,8 +79,11 @@ exports.remove = async (req, res) => {
     }
 
     const InspectionRound = require('../models/inspectionRound');
-    await InspectionRound.deleteMany({ manager: manager._id });
-
+    await InspectionRound.deleteMany({
+      managerName: manager.name,
+      managerRank: manager.rank,
+      managerDepartment: manager.department,
+    });
     res.json({ message: 'Manager deleted' });
   } catch (err) {
     console.error(err);

@@ -10,7 +10,9 @@ const HijriSchema = new Schema({
 
 const InspectionRoundSchema = new Schema(
     {
-        manager: { type: Schema.Types.ObjectId, ref: 'Manager', required: true },
+        managerName: { type: String, required: true },
+        managerRank: { type: Number, required: true },
+        managerDepartment: { type: String, required: true },
         location: { type: String, required: true },
         day: { type: String, required: true },
         Hijri: HijriSchema

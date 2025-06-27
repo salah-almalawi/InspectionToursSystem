@@ -3,10 +3,22 @@ const Manager = require('../models/manager');
 
 exports.create = async (req, res) => {
   try {
-    const round = new InspectionRound(req.body);
+    const { managerId, ...roundData } = req.body;
+
+    const manager = await Manager.findById(managerId);
+    if (!manager) {
+      return res.status(404).json({ message: 'Manager not found' });
+    }
+
+    roundData.managerName = manager.name;
+    roundData.managerRank = manager.rank;
+    roundData.managerDepartment = manager.department;
+
+    const round = new InspectionRound(roundData);
     await round.save();
 
     await Manager.findByIdAndUpdate(round.manager, { $push: { lastRounds: round._id } });
+    await Manager.findByIdAndUpdate(managerId, { $push: { lastRounds: round._id } });
 
     res.status(201).json(round);
   } catch (err) {
@@ -17,7 +29,7 @@ exports.create = async (req, res) => {
 
 exports.list = async (req, res) => {
   try {
-    const rounds = await InspectionRound.find().populate('manager');
+    const rounds = await InspectionRound.find();
     res.json(rounds);
   } catch (err) {
     console.error(err);
@@ -27,7 +39,7 @@ exports.list = async (req, res) => {
 
 exports.getById = async (req, res) => {
   try {
-    const round = await InspectionRound.findById(req.params.id).populate('manager');
+    const round = await InspectionRound.findById(req.params.id);
     if (!round) {
       return res.status(404).json({ message: 'Inspection round not found' });
     }
