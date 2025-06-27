@@ -24,3 +24,16 @@ exports.list = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+exports.getById = async (req, res) => {
+  try {
+    const round = await InspectionRound.findById(req.params.id).populate('manager');
+    if (!round) {
+      return res.status(404).json({ message: 'Inspection round not found' });
+    }
+    res.json(round);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
