@@ -20,3 +20,22 @@ exports.list = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+exports.summary = async (req, res) => {
+  try {
+    const manager = await Manager.findById(req.params.id).populate('lastRounds');
+    if (!manager) {
+      return res.status(404).json({ message: 'Manager not found' });
+    }
+    const InspectionRound = require('../models/inspectionRound');
+
+    const allRounds = await InspectionRound.find()
+      .populate('manager')
+      .sort({ createdAt: 1 });
+
+    res.json({ manager, allRounds });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
