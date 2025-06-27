@@ -1,10 +1,14 @@
 'use client';
 import Link from 'next/link';
 import styles from './page.module.css';
+import useRequireAuth from '@/utils/requireAuth';
+
 
 export default function Home() {
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
+
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  useRequireAuth();
   return (
     <div className={styles.page}>
       <main className={styles.main}>
