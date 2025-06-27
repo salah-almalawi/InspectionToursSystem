@@ -17,7 +17,6 @@ exports.create = async (req, res) => {
     const round = new InspectionRound(roundData);
     await round.save();
 
-    await Manager.findByIdAndUpdate(round.manager, { $push: { lastRounds: round._id } });
     await Manager.findByIdAndUpdate(managerId, { $push: { lastRounds: round._id } });
 
     res.status(201).json(round);
