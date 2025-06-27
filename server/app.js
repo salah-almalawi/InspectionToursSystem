@@ -16,14 +16,19 @@ const inspectionRoundRouter = require('./routes/inspectionRounds');
 const app = express();
 
 // Security middleware: Helmet, CORS, and rate limiting
+const allowedOriginsEnv = process.env.CORS_ALLOWED_ORIGINS;
+const corsOptions = allowedOriginsEnv ? { origin: allowedOriginsEnv.split(',').map(o => o.trim()) } : {};
+
+const limiter = rateLimit({
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 15 * 60 * 1000, // default 15 minutes
+  max: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,                       // default 100 requests per window
+  standardHeaders: true,
+  legacyHeaders: false
+});
+
 app.use(helmet());
-app.use(cors());
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,  // 15 minutes
-  max: 100,                  // limit each IP to 100 requests per windowMs
-  standardHeaders: true,     // Return rate limit info in the `RateLimit-*` headers
-  legacyHeaders: false       // Disable the `X-RateLimit-*` headers
-}));
+app.use(cors(corsOptions));
+app.use(limiter);
 
 // Request logging using Winston (single entry on finish)
 app.use((req, res, next) => {
