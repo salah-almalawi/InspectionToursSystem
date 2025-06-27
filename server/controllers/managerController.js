@@ -39,3 +39,52 @@ exports.summary = async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+exports.getById = async (req, res) => {
+  try {
+    const manager = await Manager.findById(req.params.id).populate('lastRounds');
+    if (!manager) {
+      return res.status(404).json({ message: 'Manager not found' });
+    }
+    res.json(manager);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.update = async (req, res) => {
+  try {
+    const { name, rank, department } = req.body;
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (rank !== undefined) updateData.rank = rank;
+    if (department !== undefined) updateData.department = department;
+
+    const manager = await Manager.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (!manager) {
+      return res.status(404).json({ message: 'Manager not found' });
+    }
+    res.json(manager);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.remove = async (req, res) => {
+  try {
+    const manager = await Manager.findByIdAndDelete(req.params.id);
+    if (!manager) {
+      return res.status(404).json({ message: 'Manager not found' });
+    }
+
+    const InspectionRound = require('../models/inspectionRound');
+    await InspectionRound.deleteMany({ manager: manager._id });
+
+    res.json({ message: 'Manager deleted' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
