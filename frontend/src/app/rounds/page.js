@@ -1,8 +1,10 @@
 'use client'
 import { useState } from 'react';
 import { useGetRoundsQuery, useCreateRoundMutation, useGetManagersQuery } from '@/services/api';
+import useRequireAuth from '@/utils/requireAuth';
 
 export default function RoundsPage() {
+    useRequireAuth();
     const { data: rounds, isLoading, error } = useGetRoundsQuery();
     const { data: managers } = useGetManagersQuery();
     const [createRound, { isLoading: creating, error: createError }] = useCreateRoundMutation();

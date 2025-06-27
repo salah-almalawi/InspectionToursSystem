@@ -1,8 +1,10 @@
 'use client'
 import Link from 'next/link';
 import { useGetManagersQuery } from '@/services/api';
+import useRequireAuth from '@/utils/requireAuth';
 
 export default function ManagersPage() {
+    useRequireAuth();
     const { data: managers, isLoading, error } = useGetManagersQuery();
 
     if (isLoading) return <p>Loading...</p>;

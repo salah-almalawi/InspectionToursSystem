@@ -2,8 +2,10 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { useGetManagerQuery, useUpdateManagerMutation } from '@/services/api';
+import useRequireAuth from '@/utils/requireAuth';
 
 export default function ManagerPage() {
+    useRequireAuth();
     const { id } = useParams();
     const router = useRouter();
     const { data, isLoading, error } = useGetManagerQuery(id);
