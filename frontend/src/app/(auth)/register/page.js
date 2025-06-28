@@ -65,6 +65,7 @@ export default function RegisterPage() {
                     </button>
                 </div>
                 {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error.data?.message || 'خطأ في التسجيل'}</p>}
+                }
             </form>
         </div>
     );
