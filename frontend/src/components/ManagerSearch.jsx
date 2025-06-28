@@ -1,9 +1,15 @@
 'use client'
 import { useState } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useDeleteManagerMutation } from '@/services/api'
 
 export default function ManagerSearch({ managers }) {
     const [query, setQuery] = useState('');
-    const filtered = managers.filter(m =>
+    const router = useRouter();
+    const [deleteManager] = useDeleteManagerMutation();
+
+    const filtered = managers.filter((m) =>
         m.name.toLowerCase().includes(query.toLowerCase()) ||
         m.department.toLowerCase().includes(query.toLowerCase())
     );
@@ -30,15 +36,21 @@ export default function ManagerSearch({ managers }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {filtered.map((m, i) => (
-                        <tr key={i}>
-                            <td><a href="#" className="manager-link">{m.name}</a></td>
+                 {filtered.map((m) => (
+                        <tr key={m._id}>
+                            <td>
+                                <Link href={`/managers/${m._id}`} className="manager-link">
+                                    {m.name}
+                                </Link>
+                            </td>
                             <td>{m.rank}</td>
                             <td>{m.department}</td>
-                            <td><span className="badge">{m.rounds}</span></td>
+                             <td><span className="badge">{m.lastRounds?.length || 0}</span></td>
                             <td>
-                                <button className="btn-icon edit" title="تعديل">✏️</button>
-                                <button className="btn-icon delete" title="حذف">🗑️</button>
+                              <button className="btn-icon edit" title="تعديل" onClick={() => router.push(`/managers/${m._id}`)}>✏️</button>
+                                <button className="btn-icon delete" title="حذف" onClick={() => deleteManager(m._id)}>
+                                    🗑️
+                                </button>
                             </td>
                         </tr>
                     ))}
