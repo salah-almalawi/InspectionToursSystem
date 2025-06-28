@@ -84,12 +84,10 @@ body {
     padding: 2rem 1rem;
 }
 
+/* ✅ FIXED: Remove problematic .page styles that hide content */
 .page {
-    display: none;
-}
-
-.page.active {
-    display: block;
+    display: block; /* Changed from 'none' to 'block' */
+    animation: fadeIn 0.5s ease;
 }
 
 /* Page Header */
@@ -1197,10 +1195,6 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.page.active {
-    animation: fadeIn 0.5s ease;
 }
 
 /* Utility Classes */
