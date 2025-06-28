@@ -38,7 +38,12 @@ export default function Home() {
         </div>
         {showReport && (
           <div>
-            <select value={selected} onChange={(e) => setSelected(e.target.value)}>
+            <select
+              id="manager-select"
+              name="manager"
+              value={selected}
+              onChange={(e) => setSelected(e.target.value)}
+            >
               <option value="">اختر معقب</option>
               {managers && managers.map((m) => (
                 <option key={m._id} value={m._id}>{m.name}</option>

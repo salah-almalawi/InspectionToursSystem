@@ -1,0 +1,35 @@
+.page {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.main {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+}
+
+.ctas {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.primary,
+.secondary {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+}
+
+.primary {
+    background-color: #0070f3;
+}
+
+.secondary {
+    background-color: #555;
+}

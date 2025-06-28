@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import { logout } from '@/features/auth/authSlice';
+import styles from './Navbar.module.css';
 
 export default function Navbar() {
     const dispatch = useDispatch();
@@ -15,8 +16,8 @@ export default function Navbar() {
     };
 
     return (
-        <nav className="navbar">
-            <ul>
+        <nav className={styles.navbar}>
+            <ul className={styles.menu}>
                 {token ? (
                     <>
                         <li><button onClick={handleLogout}>Logout</button></li>
