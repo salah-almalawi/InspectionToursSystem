@@ -5,9 +5,10 @@ import { useGetManagerQuery, useUpdateManagerMutation } from '@/services/api';
 import useRequireAuth from '@/utils/requireAuth';
 
 export default function ManagerPage() {
-    useRequireAuth();
-    const { id } = useParams();
     const router = useRouter();
+    useRequireAuth();
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const { id } = useParams();
     const { data, isLoading, error } = useGetManagerQuery(id);
     const [updateManager, { isLoading: updating, error: updateError }] = useUpdateManagerMutation();
     const [formData, setFormData] = useState({ name: '', rank: '', department: '' });
@@ -21,6 +22,14 @@ export default function ManagerPage() {
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
+
+    useEffect(() => {
+        if (!token) {
+            router.replace('/login');
+        }
+    }, [router, token]);
+
+    if (!token) return null;
 
     const handleSubmit = async (e) => {
         e.preventDefault();

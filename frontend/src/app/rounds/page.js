@@ -1,12 +1,22 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useGetRoundsQuery, useCreateRoundMutation, useGetManagersQuery } from '@/services/api';
 import useRequireAuth from '@/utils/requireAuth';
 
 export default function RoundsPage() {
+    const router = useRouter();
     useRequireAuth();
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     const { data: rounds, isLoading, error } = useGetRoundsQuery();
     const { data: managers } = useGetManagersQuery();
+    useEffect(() => {
+        if (!token) {
+            router.replace('/login');
+        }
+    }, [router, token]);
+
+    if (!token) return null;
     const [createRound, { isLoading: creating, error: createError }] = useCreateRoundMutation();
     const [formData, setFormData] = useState({ managerId: '', location: '', day: '' });
 

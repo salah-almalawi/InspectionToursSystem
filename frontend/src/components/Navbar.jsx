@@ -1,15 +1,31 @@
 'use client'
 import Link from 'next/link';
+import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { logout } from '@/features/auth/authSlice';
 
 export default function Navbar() {
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const token = useSelector((state) => state.auth.token);
+
+    const handleLogout = () => {
+        dispatch(logout());
+        router.push('/login');
+    };
+
     return (
         <nav className="navbar">
             <ul>
-                <li><Link href="/">Home</Link></li>
-                <li><Link href="/login">Login</Link></li>
-                <li><Link href="/register">Register</Link></li>
-                <li><Link href="/managers">Managers</Link></li>
-                <li><Link href="/rounds">Rounds</Link></li>
+                {token ? (
+                    <>
+                        <li><button onClick={handleLogout}>Logout</button></li>
+                        <li><Link href="/managers">إدارة المعقبين</Link></li>
+                        <li><Link href="/rounds">إدارة الجولات التعقيبية</Link></li>
+                    </>
+                ) : (
+                    <li><Link href="/login">Login</Link></li>
+                )}
             </ul>
         </nav>
     );

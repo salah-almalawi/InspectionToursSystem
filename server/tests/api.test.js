@@ -1,10 +1,13 @@
 const request = require('supertest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
+const bcrypt = require('bcryptjs');
+const Auth = require('../models/auth');
 
 let app;
 let mongoServer;
 let token;
+let adminToken;
 
 beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
@@ -22,10 +25,25 @@ afterEach(async () => {
     await mongoose.connection.db.dropDatabase();
 });
 
+async function setupAdmin() {
+    const hashed = await bcrypt.hash('adminpass', 10);
+    await Auth.create({ username: 'admin', password: hashed });
+    const res = await request(app)
+        .post('/api/auth/login')
+        .send({ username: 'admin', password: 'adminpass' });
+    adminToken = res.body.token;
+}
+
+
 describe('Authentication', () => {
+
+    beforeEach(async () => {
+        await setupAdmin();
+    });
     test('register', async () => {
         const res = await request(app)
             .post('/api/auth/register')
+            .set('Authorization', `Bearer ${adminToken}`)
             .send({ username: 'user1', password: 'pass123' });
         expect(res.status).toBe(201);
         expect(res.body.token).toBeDefined();
@@ -35,6 +53,7 @@ describe('Authentication', () => {
     test('login', async () => {
         await request(app)
             .post('/api/auth/register')
+            .set('Authorization', `Bearer ${adminToken}`)
             .send({ username: 'user2', password: 'pass123' });
         const res = await request(app)
             .post('/api/auth/login')
@@ -51,12 +70,12 @@ describe('Authentication', () => {
 
 describe('Manager CRUD', () => {
     beforeEach(async () => {
-        if (!token) {
-            const res = await request(app)
-                .post('/api/auth/register')
-                .send({ username: 'cruduser', password: 'pass123' });
-            token = res.body.token;
-        }
+          await setupAdmin();
+        const res = await request(app)
+            .post('/api/auth/register')
+            .set('Authorization', `Bearer ${adminToken}`)
+            .send({ username: 'cruduser', password: 'pass123' });
+        token = res.body.token;
     });
 
     test('create, list, get, update, delete manager', async () => {
@@ -95,12 +114,12 @@ describe('Manager CRUD', () => {
 
 describe('Inspection rounds', () => {
     beforeEach(async () => {
-        if (!token) {
-            const res = await request(app)
-                .post('/api/auth/register')
-                .send({ username: 'rounduser', password: 'pass123' });
-            token = res.body.token;
-        }
+      await setupAdmin();
+        const res = await request(app)
+            .post('/api/auth/register')
+            .set('Authorization', `Bearer ${adminToken}`)
+            .send({ username: 'rounduser', password: 'pass123' });
+        token = res.body.token;
     });
 
     test('create and retrieve round', async () => {
