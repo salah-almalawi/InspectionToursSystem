@@ -7,7 +7,6 @@ import useRequireAuth from '@/utils/requireAuth';
 export default function ManagerPage() {
     const router = useRouter();
     useRequireAuth();
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     const { id } = useParams();
     const { data, isLoading, error } = useGetManagerQuery(id);
     const [updateManager, { isLoading: updating, error: updateError }] = useUpdateManagerMutation();
@@ -24,13 +23,6 @@ export default function ManagerPage() {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    useEffect(() => {
-        if (!token) {
-            router.replace('/login');
-        }
-    }, [router, token]);
-
-    if (!token) return null;
     const handleDelete = async () => {
         try {
             await deleteManager(id).unwrap();

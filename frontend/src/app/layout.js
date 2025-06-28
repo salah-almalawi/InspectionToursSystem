@@ -1,7 +1,7 @@
 import "./globals.css";
 import Providers from "./Providers";
 import Navbar from "@/components/Navbar";
-import Head from "next/head";
+
 import Script from "next/script";
 
 export const metadata = {
@@ -12,14 +12,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <Head>
+      <head>
         <link
           href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap"
           rel="stylesheet"
         />
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" strategy="beforeInteractive" />
         <Script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" strategy="beforeInteractive" />
-      </Head>
+      </head>
       <body>
         <Providers>
           <Navbar />

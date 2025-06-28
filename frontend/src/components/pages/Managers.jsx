@@ -1,19 +1,11 @@
 'use client'
 import Link from 'next/link'
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
 import { useGetManagersQuery } from '@/services/api'
 import ManagerSearch from '../ManagerSearch'
 
 
 export default function Managers() {
-    const { data = [], refetch } = useGetManagersQuery()
-    const managers = useSelector((state) => state.managers.list)
-
-    // refetch when component mounts if no data
-    useEffect(() => {
-        if (managers.length === 0) refetch()
-    }, [managers.length, refetch])
+    const { data: managers = [] } = useGetManagersQuery()
 
     return (
         <section id="managers" className="page">

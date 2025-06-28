@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCreateManagerMutation } from '@/services/api';
 import useRequireAuth from '@/utils/requireAuth';
@@ -9,15 +9,6 @@ export default function NewManagerPage() {
     const [createManager, { isLoading, error }] = useCreateManagerMutation();
     const [formData, setFormData] = useState({ name: '', rank: '', department: '' });
     useRequireAuth();
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-
-    useEffect(() => {
-        if (!token) {
-            router.replace('/login');
-        }
-    }, [router, token]);
-
-    if (!token) return null;
 
     const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
