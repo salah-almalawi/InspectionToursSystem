@@ -6,6 +6,8 @@ const winston = require('./utils/logger');
 const helmet = require('helmet');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./swagger');
 require('./config/db');
 
 
@@ -44,6 +46,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Swagger API docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use('/api/auth', authRouter);
 app.use('/api/managers', managerRouter);
@@ -51,3 +55,4 @@ app.use('/api/rounds', inspectionRoundRouter);
 
 
 module.exports = app;
+
