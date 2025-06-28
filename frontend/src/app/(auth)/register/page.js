@@ -2,12 +2,19 @@
 import { useState } from 'react';
 import { useRegisterMutation } from '@/services/api';
 import { useRouter } from 'next/navigation';
+import useRequireAuth from '@/utils/requireAuth';
+
+
+
+
+
+
 
 export default function RegisterPage() {
     const router = useRouter();
     const [register, { isLoading, error }] = useRegisterMutation();
     const [formData, setFormData] = useState({ username: '', password: '' });
-
+    useRequireAuth();
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
